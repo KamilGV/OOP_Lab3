@@ -1,16 +1,23 @@
+import random
+import time
+
 class Shape:
     def __init__(self, obj='Shape'):
-        print('Конструктор объекта: ', obj)
+        print('Конструктор', obj)
     def show(self,obj='Shape'):
-        print('Метод объекта ', obj)
-
+        print('Метод', obj)
+    def __del__(self, obj='Shape'):
+        print('Деструктор', obj)
+        
 class Point(Shape):
     def __init__(self, obj='Point'):
         self.x = 0
         self.y = 0
         Shape.__init__(self, obj)
     def show(self, obj = 'Point'):
-        Shape.show(self, obj)    
+        Shape.show(self, obj)
+    def __del__(self, obj='Point'):
+        Shape.__del__(self,obj)
     
 class Circle(Point):
     def __init__(self, obj='Circle'):
@@ -18,13 +25,18 @@ class Circle(Point):
         Shape.__init__(self, obj)
     def show(self, obj = 'Circle'):
         Shape.show(self, obj)
+    def __del__(self, obj='Circle'):
+        Shape.__del__(self,obj)
         
 class Square(Shape):
     def __init__(self, obj='Square'):
-        a = 4
+        self.a = 4
         Shape.__init__(self, obj)
-    def show(self,obj='Skuare'):
+    def show(self,obj='Square'):
         Shape.show(self, obj)
+    def __del__(self, obj='Square'):
+        Shape.__del__(self,obj)
+
 
 
 class Node:
@@ -75,4 +87,35 @@ class Storage:
         while current.next != None:
             current = current.next
             length += 1
-        return length + 1 
+        return length + 1
+    def get_object(self,n):
+        count = 0
+        current = self.first
+        while 1:
+            if count == n:
+                return current.obj
+            current = current.next
+            count+=1
+            
+            
+if __name__ == '__main__':
+    start = time.time()
+    n = 100
+    s = Storage()
+    for i in range(3):
+        s.add(Point(),0)
+        s.add(Circle(),0)
+        s.add(Square(),0)
+
+    for i in range(n):
+        n = random.randrange(0,s.length())
+        m = random.choice([3,6,9,12,5,8,7,10,13])
+        obje = random.choice([Shape,Point,Circle,Square])
+        if m%3==2:
+            s.delete(n)
+        elif m%3==0:
+            obje = random.choice([Shape,Point,Circle,Square])
+            s.add(obje(),n)
+        else:
+            s.get_object(n).show()
+    print('Время работы: %.4f секунды.' % (time.time()-start))
